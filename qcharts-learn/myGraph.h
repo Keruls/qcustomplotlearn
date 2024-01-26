@@ -3,7 +3,9 @@
 #include "tools.h"
 #include <QObject>
 #include <QQueue>
+#include <QFile>
 #include "mySerial.h"
+#include "tools.h"
 class MyGraph :public QObject
 {
 	Q_OBJECT
@@ -15,6 +17,8 @@ public:
 	void setPen(int r = 255, int g = 255, int b = 255, int a = 100);
 	/*"background"，"grid"，"main"，"axes"，"legend"，"overlay"*/
 	void setLayer(QString layer);
+	//保存曲线点的数据，格式为yyyy-mm-dd hh-mm-ss
+	void saveGraphData2File(QString path) const;
 public:
 	QString m_name;
 	QCPGraph *m_graph;

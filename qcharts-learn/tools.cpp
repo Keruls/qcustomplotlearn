@@ -16,10 +16,26 @@ namespace tools {
 			return distrib(gen);
 		}
 	}
-	
+
 	double getCurrentTime() {
 		//return QTime(0, 0).msecsTo(QTime::currentTime());//当日凌晨开始到现在现在的秒数
 		return static_cast<double>(QDateTime::currentMSecsSinceEpoch());//纪元开始到现在的秒数
+	}
+
+	QString getCurrentDate(QString format) {
+		return QDateTime::currentDateTime().toString(format);
+	}
+
+	bool mutilDirPath(QString path)
+	{
+		QFileInfo info(path);
+		QString abs_path = info.absolutePath();
+		if (!QDir(abs_path).exists()) {
+			if (!mutilDirPath(abs_path)) {
+				return false;
+			}
+		}
+		return QDir().mkdir(path);
 	}
 
 	QMutex SharedResourceLocker::mutex;

@@ -21,5 +21,5 @@ public:
 	QCPItemText* m_tracer_text = nullptr;
 private:
 	QCustomPlot* parent_plot = nullptr;
-	const QCPGraph* parent_graph = nullptr;
+	QCPGraph* parent_graph = nullptr;
 };

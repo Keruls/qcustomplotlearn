@@ -2,6 +2,7 @@
 
 MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass())
 {
+	//-----------------------------------------------------------------------------------------
 	qDebug() << "main thread:" << QThread::currentThreadId();
 	ui->setupUi(this);
 	m_plot = ui->m_qcp;
@@ -15,9 +16,9 @@ MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass(
 	//graph[ 1 ]->setPen(0, 255, 0);
 	m_tracer = new MyTracer(m_plot, MyTracer::TextPositionStyle::follow);
 	m_serial = new MySerial(&buf, this);
-
+	//-----------------------------------------------------------------------------------------
 	thread_handle = new QThread;
-	handle = new TaskWoker(this);
+	handle = new TaskWoker();
 	handle->moveToThread(thread_handle);
 	connect(handle_timer, &QTimer::timeout, this, [ & ] () {
 		emit tryHandle(&buf, graph[ 0 ]);
@@ -29,20 +30,35 @@ MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass(
 		thread_handle->wait();
 		thread_handle->quit();
 		});
-	//replot Hz-------------------------------------------------
+	//-----------------------------------------------------------------------------------------
+	//图表刷新频率
 	connect(replot_timer, &QTimer::timeout, this, [ & ] () {
 		m_plot->replot(QCustomPlot::rpQueuedReplot);
 		});
-	//active tracer-------------------------------------------------
+	//鼠标移动更新游标位置
 	connect(m_plot, &QCustomPlot::mouseMove, m_tracer, &MyTracer::updatePosition);
-	//double click to change the tracer's parent -------------------
+	//双击曲线使游标吸附在该曲线上
 	connect(m_plot, &QCustomPlot::plottableDoubleClick, this, [ & ] (QCPAbstractPlottable *plottable, int index, QMouseEvent *e) {
 		QCPGraph *target_graph = qobject_cast<QCPGraph *>(plottable);
 		if (target_graph) {//If the plottable is converted to qcpgraph, it means that a graph was clicked with the mouse
-			qDebug() << "clicked graph:" << target_graph->name();
+			qDebug() << "double clicked graph:" << target_graph->name();
 			m_tracer->setParentGraph(target_graph);
 		}
 		});
+	//-----------------------------------------------------------------------------------------
+	//选择目录
+	ui->path->setReadOnly(true);
+	connect(ui->choose_path, &QPushButton::pressed, this, [ & ] () {
+		QFileDialog fd;
+		fd.setFileMode(QFileDialog::Directory);
+		ui->path->setText(fd.getExistingDirectory(this, "Choose Target Directory", "./") + "/");
+		});
+	//保存曲线数据到路径
+	connect(ui->save, &QPushButton::pressed, this, [ & ] () {
+		QString dir_path = ui->path->text();
+		graph[ 0 ]->saveGraphData2File(dir_path);
+		});
+	//-----------------------------------------------------------------------------------------
 	handle_timer->start(HANDLE_TIMER_GAP);
 	replot_timer->start(REPLOT_TIMER_GAP);
 }

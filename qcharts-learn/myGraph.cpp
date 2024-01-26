@@ -40,6 +40,30 @@ void MyGraph::setLayer(QString layer)
 	m_graph->setLayer(layer);
 }
 
+void MyGraph::saveGraphData2File(QString path) const
+{
+	QString file_name = tools::getCurrentDate(QString("yyyy-mm-dd_hh-mm-ss"));
+	//QString path = "F:\\" + file_name + ".txt";
+	path += (file_name + ".txt");
+	qDebug() << path;
+	QFile f(path);
+	QSharedPointer<QCPGraphDataContainer> graph_data = m_graph->data();
+	if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		QTextStream w(&f);
+		w.AlignLeft;w.setFieldWidth(15);
+		w<< "X(Key)"<<"Y(Value)\n";
+		for (int i = 0; i < m_graph->dataCount(); ++i) {
+			w << graph_data->at(i)->key << graph_data->at(i)->value << "\n";
+		}
+		f.close();
+		qDebug() << "graph data save complete.";
+	}
+	else {
+		qDebug() << "file open fail.";
+		qDebug() << f.errorString();
+	}
+}
+
 
 TaskWoker::TaskWoker(QObject *parent):QObject(parent)
 {
@@ -49,7 +73,7 @@ TaskWoker::~TaskWoker()
 {
 }
 void TaskWoker::run(QQueue<quint8> *buf , MyGraph *mg) {
-	qDebug() << "buff_size:" << buf->size();
+	//qDebug() << "buff_size:" << buf->size();
 	//tools::SharedResourceLocker::mutex.lock();
 	while (buf->size() >= 3)
 	{

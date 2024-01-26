@@ -2,9 +2,6 @@
 
 MySerial::MySerial(QQueue<quint8> *buf, QObject *parent) :buf(buf), QObject(parent)
 {
-	num = 0;
-	all_byte_num = 0;
-	buf_size = 0;
 	m_port = new QSerialPort(this);
 	recive_timer = new QTimer(this);
 	m_port->setBaudRate(QSerialPort::Baud9600);//波特率_9600
@@ -37,17 +34,12 @@ bool MySerial::recive()
 {
 	recive_timer->stop();//防止频繁触发槽函数导致堆积影响性能
 	//tools::SharedResourceLocker::mutex.lock();
-	buf_size = buf->size();
-	data = m_port->read(BUFF_MAXSIZE - buf_size);//每次读取的字节数不会超过BUFF_MAXSIZE
+	data = m_port->read(BUFF_MAXSIZE - buf->size());//每次读取的字节数不会超过BUFF_MAXSIZE
 	//data = m_port->readAll();
-	qDebug() << "bytesAvailable:" << m_port->bytesAvailable();
-	qDebug() << "be read byte num:" << (all_byte_num += data.size());
 	for (quint8 i : data) {
 		buf->enqueue(i);
-		++num;
 	}
 	//tools::SharedResourceLocker::mutex.unlock();
-	qDebug() << "enqueue frame num:" << num / 3;
 	recive_timer->start(RECIVE_TIMER_GAP);
 	return 1;
 }

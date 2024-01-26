@@ -16,7 +16,7 @@ MyTracer::~MyTracer()
 
 bool MyTracer::updatePosition(QMouseEvent *e)
 {
-	//get mouse's current position and map to chart
+	//获取鼠标当前位置映射在图表上的坐标
 	double x = parent_plot->xAxis->pixelToCoord(e->position().x());
 	double y = parent_plot->yAxis->pixelToCoord(e->position().y());
 	limitVisibleArea(x, y);

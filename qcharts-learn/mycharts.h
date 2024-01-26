@@ -4,6 +4,7 @@
 #include <QtGlobal>
 #include <QDebug>
 #include <QThread>
+#include <QFileDialog>
 #include "tools.h"
 #include "ui_mycharts.h"
 #include "myTracer.h"
@@ -39,6 +40,7 @@ public:
     void axisStyle(AxisStyle style, QCPAxis* axis);
 signals:
     void tryHandle(QQueue<quint8> *data_queue, MyGraph *mg);
+    void choosedDir(QString dir_path);
 public:
 private:
     Ui::MyChartsClass* ui;
