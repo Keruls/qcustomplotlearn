@@ -11,14 +11,13 @@ MySerial::MySerial(QQueue<quint8> *buf, QObject *parent) :buf(buf), QObject(pare
 	m_port->setPortName("COM2");
 	if (m_port->open(QIODevice::ReadWrite)) {
 		qDebug() << "port opened.";
+		connect(recive_timer, &QTimer::timeout, this, &MySerial::recive);
+		recive_timer->start(RECIVE_TIMER_GAP);
+		//connect(m_port, &QSerialPort::readyRead, this, &MySerial::recive);
 	}
 	else {
 		qDebug() << "port opened fail.";
 	}
-	connect(recive_timer, &QTimer::timeout, this, &MySerial::recive);
-	recive_timer->start(RECIVE_TIMER_GAP);
-	//connect(m_port, &QSerialPort::readyRead, this, &MySerial::recive);
-	
 }
 
 MySerial::~MySerial()
