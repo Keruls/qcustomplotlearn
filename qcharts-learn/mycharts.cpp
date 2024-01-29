@@ -2,7 +2,7 @@
 
 MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass())
 {
-	//初始化-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 	qDebug() << "main thread:" << QThread::currentThreadId();
 	ui->setupUi(this);
 	m_plot = ui->m_qcp;
@@ -11,14 +11,12 @@ MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass(
 	initAxis();
 	handle_timer = new QTimer(this);
 	replot_timer = new QTimer(this);
-	graph.push_back(new MyGraph(m_plot, "Line_111",this));
-	graph.push_back(new MyGraph(m_plot, "Line_222",this));
-	qDebug() << "graph[0]:" << graph[ 0 ]->m_graph->name();
-	qDebug() << "graph[1]:" << graph[ 1 ]->m_graph->name();
+	graph.push_back(new MyGraph(m_plot, "Line_1",this));
+	//graph.push_back(new MyGraph(m_plot, "Line_2",this));
 	//graph[ 1 ]->setPen(0, 255, 0);
 	m_tracer = new MyTracer(m_plot, MyTracer::TextPositionStyle::follow);
 	m_serial = new MySerial(&buf, this);
-	//多线程处理-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 	thread_handle = new QThread;
 	handle = new TaskWoker();
 	handle->moveToThread(thread_handle);
@@ -32,7 +30,7 @@ MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass(
 		thread_handle->wait();
 		thread_handle->quit();
 		});
-	//游标及一般信号槽连接-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 	//图表刷新频率
 	connect(replot_timer, &QTimer::timeout, this, [ & ] () {
 		m_plot->replot(QCustomPlot::rpQueuedReplot);
@@ -47,32 +45,20 @@ MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass(
 			m_tracer->setParentGraph(target_graph);
 		}
 		});
-	//数据保存-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 	//选择目录
 	ui->path->setReadOnly(true);
 	connect(ui->choose_path, &QPushButton::pressed, this, [ & ] () {
 		QFileDialog fd;
-		fd.setFileMode(QFileDialog::AnyFile);
+		fd.setFileMode(QFileDialog::Directory);
 		ui->path->setText(fd.getExistingDirectory(this, "Choose Target Directory", "./") + "/");
 		});
 	//保存曲线数据到路径
 	connect(ui->save, &QPushButton::pressed, this, [ & ] () {
-		graph[ 0 ]->saveGraphData2File(ui->path->text());
-		ui->path->setText("");
+		QString dir_path = ui->path->text();
+		graph[ 0 ]->saveGraphData2File(dir_path);
 		});
-	//从文件加载数据-----------------------------------------------------------------------------------------
-	//选择目录
-	ui->path_2->setReadOnly(true);
-	connect(ui->choose_path_2, &QPushButton::pressed, this, [ & ] () {
-		QFileDialog fd;
-		fd.setFileMode(QFileDialog::AnyFile);
-		ui->path_2->setText(fd.getOpenFileName(this, "Choose Target File", "./"));
-		});
-	connect(ui->load_file, &QPushButton::pressed, this, [ & ] () {
-		graph[ 0 ]->loadFileData2Graph(ui->path_2->text());
-		ui->path_2->setText("");
-		});
-	//定时器启动-----------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------
 	handle_timer->start(HANDLE_TIMER_GAP);
 	replot_timer->start(REPLOT_TIMER_GAP);
 }

@@ -17,11 +17,8 @@ public:
 	void setPen(int r = 255, int g = 255, int b = 255, int a = 100);
 	/*"background"，"grid"，"main"，"axes"，"legend"，"overlay"*/
 	void setLayer(QString layer);
-//public slots:
 	//保存曲线点的数据，格式为yyyy-mm-dd hh-mm-ss
 	void saveGraphData2File(QString path) const;
-	//从文件加载数据到曲线
-	void loadFileData2Graph(QString path);
 public:
 	QString m_name;
 	QCPGraph *m_graph;

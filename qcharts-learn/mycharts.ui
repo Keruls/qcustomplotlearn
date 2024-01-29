@@ -29,63 +29,67 @@
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>320</y>
+     <y>380</y>
      <width>561</width>
-     <height>25</height>
+     <height>16</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QLineEdit" name="path"/>
-    </item>
-    <item>
-     <widget class="QPushButton" name="choose_path">
-      <property name="text">
-       <string>...</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="save">
-      <property name="text">
-       <string>SAVE</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget_2">
+  <widget class="QLineEdit" name="path">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>350</y>
-     <width>561</width>
-     <height>25</height>
+     <y>330</y>
+     <width>351</width>
+     <height>21</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QLineEdit" name="path_2"/>
-    </item>
-    <item>
-     <widget class="QPushButton" name="choose_path_2">
-      <property name="text">
-       <string>...</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="load_file">
-      <property name="text">
-       <string>LOAD</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+  </widget>
+  <widget class="QPushButton" name="choose_path">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>330</y>
+     <width>31</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>...</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="save">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>330</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>save</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>360</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Active</string>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
