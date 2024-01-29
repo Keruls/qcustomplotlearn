@@ -2,7 +2,7 @@
 
 
 MyGraph::MyGraph(QCustomPlot *parent_plot, QString graph_name, QObject *parent) :
-	parent_plot(parent_plot), m_name(graph_name),QObject(parent)
+	parent_plot(parent_plot), m_name(graph_name), QObject(parent)
 {
 	m_graph = parent_plot->addGraph();
 	m_graph->setName(graph_name);
@@ -42,21 +42,70 @@ void MyGraph::setLayer(QString layer)
 
 void MyGraph::saveGraphData2File(QString path) const
 {
-	QString file_name = tools::getCurrentDate(QString("yyyy-mm-dd_hh-mm-ss"));
-	//QString path = "F:\\" + file_name + ".txt";
-	path += (file_name + ".txt");
-	qDebug() << path;
-	QFile f(path);
 	QSharedPointer<QCPGraphDataContainer> graph_data = m_graph->data();
-	if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+	QString file_name = tools::getCurrentDate(QString("yyyy-mm-dd_hh-mm-ss"));
+	//保存为CSV
+	if (1) {
+		path += (file_name + ".csv");
+		qDebug() << path;
+		QFile f(path);
+		if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+			QTextStream w(&f);
+			w << "X,Y\n";
+			for (int i = 0; i < m_graph->dataCount(); ++i) {
+				w << graph_data->at(i)->key << "," << graph_data->at(i)->value << "\n";
+			}
+			f.close();
+			qDebug() << "graph data save complete.";
+		}
+		else {
+			qDebug() << "file open fail.";
+			qDebug() << f.errorString();
+		}
+	}
+	//保存为JSON
+	if (0) {
+		path += (file_name + ".json");
+		qDebug() << path;
+		QFile f(path);
+		if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+			QTextStream w(&f);
+			//w.AlignLeft;w.setFieldWidth(15);
+			w << "{\n";
+			w << "\"X\" : \"Y\",\n";
+			for (int i = 0; i < m_graph->dataCount(); ++i) {
+				w << "    \"" << graph_data->at(i)->key << "\" : " << graph_data->at(i)->value << ",\n";
+			}
+			w << "\"key\" : \"value\"\n";
+			w << "}";
+			f.close();
+			qDebug() << "graph data save complete.";
+		}
+		else {
+			qDebug() << "file open fail.";
+			qDebug() << f.errorString();
+		}
+
+	}
+}
+
+void MyGraph::loadFileData2Graph(QString path) {
+	QFile f(path);
+	QString line;
+	QStringList line_data;
+	if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		QTextStream w(&f);
-		w.AlignLeft;w.setFieldWidth(15);
-		w<< "X(Key)"<<"Y(Value)\n";
-		for (int i = 0; i < m_graph->dataCount(); ++i) {
-			w << graph_data->at(i)->key << graph_data->at(i)->value << "\n";
+		int num = 0;
+		w.readLine();//将第一行(列名)排除
+		while (!w.atEnd())
+		{
+			line = w.readLine();
+			line_data = line.split(',');
+			m_graph->addData(line_data.at(0).toDouble(), line_data.at(1).toDouble());
+			++num;
 		}
 		f.close();
-		qDebug() << "graph data save complete.";
+		qDebug() << "读取完成，数据数量:" << num;
 	}
 	else {
 		qDebug() << "file open fail.";
@@ -65,14 +114,14 @@ void MyGraph::saveGraphData2File(QString path) const
 }
 
 
-TaskWoker::TaskWoker(QObject *parent):QObject(parent)
+TaskWoker::TaskWoker(QObject *parent) :QObject(parent)
 {
 }
 
 TaskWoker::~TaskWoker()
 {
 }
-void TaskWoker::run(QQueue<quint8> *buf , MyGraph *mg) {
+void TaskWoker::run(QQueue<quint8> *buf, MyGraph *mg) {
 	//qDebug() << "buff_size:" << buf->size();
 	//tools::SharedResourceLocker::mutex.lock();
 	while (buf->size() >= 3)
@@ -84,9 +133,10 @@ void TaskWoker::run(QQueue<quint8> *buf , MyGraph *mg) {
 			if (tail_byte == 0xee) {
 				mg->m_graph->addData(mg->m_graph->dataCount(), static_cast<double>(data_byte));
 			}
-			else 
+			else
 			{
 				qDebug() << "tail_byte != 0xee";
+				break;
 			}
 		}
 		else
