@@ -21,6 +21,7 @@ bool MyTracer::updatePosition(QMouseEvent *e)
 	double y = parent_plot->yAxis->pixelToCoord(e->position().y());
 	limitVisibleArea(x, y);
 	searchNearly(parent_graph->data(), x, y);
+	parent_plot->replot();
 	return 1;
 }
 

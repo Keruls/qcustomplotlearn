@@ -99,6 +99,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="busAnalysis.cpp" />
     <ClCompile Include="mycharts.cpp" />
     <ClCompile Include="myGraph.cpp" />
     <ClCompile Include="mySerial.cpp" />
@@ -123,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mySerial.h" />
+    <ClInclude Include="busAnalysis.h" />
     <ClInclude Include="tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
