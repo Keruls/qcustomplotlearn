@@ -22,7 +22,7 @@ signals:
 public slots:
 	//接收数据放入队列
 	bool recive();
-public:
+private:
 	QByteArray data;
 	QTimer *recive_timer;
 	QSerialPort *m_port;

@@ -23,11 +23,11 @@ struct AxisStyle {
     QString lable_name;
     bool sub_tick_visible = false;
     bool grid_visible = false;
-    int tick_count = 0;
-    int sub_tick_count = 0;
-    int tick_rotate = 0;
-    double min_tick = 0;
-    double max_tick = 0;
+    quint32 tick_count = 0;
+    quint32 sub_tick_count = 0;
+    quint32 tick_rotate = 0;
+    quint64 min_tick = 0;
+    quint64 max_tick = 0;
 };
 class MyCharts : public QWidget
 {
@@ -40,7 +40,6 @@ public:
     void axisStyle(AxisStyle style, QCPAxis* axis);
 signals:
     void tryHandle(QQueue<quint8> *data_queue, MyGraph *mg);
-public:
 private:
     Ui::MyChartsClass* ui;
     QCustomPlot* m_plot;

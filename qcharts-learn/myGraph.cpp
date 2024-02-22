@@ -113,6 +113,17 @@ void MyGraph::loadFileData2Graph(QString path) {
 	}
 }
 
+bool MyGraph::addData(double key, double value)
+{
+	m_graph->addData(key, value);
+	return true;
+}
+
+quint32 MyGraph::getGraphDataCount()
+{
+	return quint32(m_graph->dataCount());
+}
+
 
 TaskWoker::TaskWoker(QObject *parent) :QObject(parent)
 {
@@ -131,7 +142,7 @@ void TaskWoker::run(QQueue<quint8> *buf, MyGraph *mg) {
 		quint8 tail_byte = buf->dequeue();
 		if (head_byte == 0x66) {
 			if (tail_byte == 0xee) {
-				mg->m_graph->addData(mg->m_graph->dataCount(), static_cast<double>(data_byte));
+				mg->addData(mg->getGraphDataCount(), static_cast<double>(data_byte));
 			}
 			else
 			{

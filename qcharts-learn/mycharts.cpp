@@ -13,8 +13,6 @@ MyCharts::MyCharts(QWidget *parent) : QWidget(parent), ui(new Ui::MyChartsClass(
 	replot_timer = new QTimer(this);
 	graph.push_back(new MyGraph(m_plot, "Line_111",this));
 	graph.push_back(new MyGraph(m_plot, "Line_222",this));
-	qDebug() << "graph[0]:" << graph[ 0 ]->m_graph->name();
-	qDebug() << "graph[1]:" << graph[ 1 ]->m_graph->name();
 	//graph[ 1 ]->setPen(0, 255, 0);
 	m_tracer = new MyTracer(m_plot, MyTracer::TextPositionStyle::follow);
 	m_serial = new MySerial(&buf, this);

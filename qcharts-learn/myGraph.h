@@ -22,11 +22,12 @@ public:
 	void saveGraphData2File(QString path) const;
 	//从文件加载数据到曲线
 	void loadFileData2Graph(QString path);
-public:
-	QString m_name;
-	QCPGraph *m_graph;
+	bool addData(double key, double value);
+	quint32 getGraphDataCount();
 private:
 	const QCustomPlot *parent_plot;
+	QString m_name;
+	QCPGraph *m_graph;
 };
 
 //线程任务类，用于为某一条曲线加载数据

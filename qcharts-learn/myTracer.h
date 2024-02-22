@@ -16,10 +16,9 @@ public:
 	void setParentGraph(QCPGraph* g);
 	void searchNearly(QSharedPointer<QCPGraphDataContainer> parent_graph_data, double x, double y);
 	//double searchNearly(double x);
-public:
+private:
 	QCPItemTracer* m_tracer = nullptr;
 	QCPItemText* m_tracer_text = nullptr;
-private:
 	QCustomPlot* parent_plot = nullptr;
 	QCPGraph* parent_graph = nullptr;
 };
