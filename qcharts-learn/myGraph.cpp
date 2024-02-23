@@ -132,6 +132,7 @@ TaskWoker::TaskWoker(QObject *parent) :QObject(parent)
 TaskWoker::~TaskWoker()
 {
 }
+//临时设计的解析过程，需根据实际情况重写
 void TaskWoker::run(QQueue<quint8> *buf, MyGraph *mg) {
 	//qDebug() << "buff_size:" << buf->size();
 	//tools::SharedResourceLocker::mutex.lock();

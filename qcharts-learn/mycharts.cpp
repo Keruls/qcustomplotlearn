@@ -87,7 +87,7 @@ void MyCharts::initAxis() {
 
 	AxisStyle as_x;
 	as_x.style = "double";
-	as_x.lable_name = "（时间/Date）";
+	as_x.lable_name = "（数量）";
 	as_x.tick_count = 10;
 	as_x.tick_rotate = 30;
 	as_x.min_tick = 0;
@@ -96,9 +96,9 @@ void MyCharts::initAxis() {
 
 	AxisStyle as_y;
 	as_y.style = "double";
-	as_y.lable_name = "（大小/Double）";
+	as_y.lable_name = "（数值）";
 	as_y.tick_count = 10;
-	as_y.min_tick = -100;
+	as_y.min_tick = 0;
 	as_y.max_tick = 100;
 	MyCharts::axisStyle(as_y, m_plot->yAxis);
 }
@@ -106,6 +106,7 @@ void MyCharts::initAxis() {
 //ticker type of axis
 void MyCharts::axisStyle(AxisStyle style, QCPAxis *axis)
 {
+	//时间
 	if (style.style == "date") {
 		QSharedPointer<QCPAxisTickerDateTime> dateTicker(new QCPAxisTickerDateTime);
 		dateTicker->setDateTimeFormat("hh:mm:ss.zzz");

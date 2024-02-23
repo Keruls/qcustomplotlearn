@@ -52,9 +52,6 @@
     <ClCompile Include="mySerial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="busAnalysis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qcustomplot.h">
@@ -75,9 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="busAnalysis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

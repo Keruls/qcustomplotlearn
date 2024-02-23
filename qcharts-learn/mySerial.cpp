@@ -4,11 +4,13 @@ MySerial::MySerial(QQueue<quint8> *buf, QObject *parent) :buf(buf), QObject(pare
 {
 	m_port = new QSerialPort(this);
 	recive_timer = new QTimer(this);
+	//修改为参数化-----------------------------------------------
 	m_port->setBaudRate(QSerialPort::Baud9600);//波特率_9600
 	m_port->setParity(QSerialPort::NoParity);//校验位_n
 	m_port->setDataBits(QSerialPort::Data8);//数据位_8
 	m_port->setStopBits(QSerialPort::OneStop);//停止位_1
 	m_port->setPortName("COM2");
+	//------------------------------------------------------
 	if (m_port->open(QIODevice::ReadWrite)) {
 		qDebug() << "port opened.";
 		connect(recive_timer, &QTimer::timeout, this, &MySerial::recive);
